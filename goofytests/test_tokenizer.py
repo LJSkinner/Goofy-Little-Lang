@@ -22,9 +22,7 @@ def test_tokenizer_assigns_correct_value():
     test_lines = ["SHOVE", "3", "FREEZE"]
     
     tokenizer = Tokenizer(test_lines)
-    
-  
-    
+      
     # DO
     tokens = tokenizer.tokenize()
     
@@ -36,11 +34,53 @@ def test_tokenizer_assigns_correct_value():
             
     assert passed
     
-def test_tokenizer_assings_correct_type():
+def test_tokenizer_assings_correct_type_1():
     # ASSIGN
     test_lines = ["SHOVE", "3", "FREEZE"]
     
     expected_types = [TokenType.OPCODE, TokenType.INT_LITERAL, TokenType.OPCODE]
+    
+    tokenizer = Tokenizer(test_lines)
+    
+    # DO
+    tokens = tokenizer.tokenize()
+    
+    passed = True
+    
+    for i in range(len(tokens)):
+        if expected_types[i].name != tokens[i].type.name:
+            passed = False
+            
+    assert passed
+    
+def test_tokenizer_assings_correct_type_2():
+    # ASSIGN
+    test_lines = ["SHOVE 3", "GLUE", "SHOVE 5", "YEET", "FREEZE"]
+    
+    expected_types = [TokenType.OPCODE, TokenType.INT_LITERAL, TokenType.OPCODE, 
+                      TokenType.OPCODE, TokenType.INT_LITERAL, TokenType.OPCODE, 
+                      TokenType.OPCODE]
+    
+    tokenizer = Tokenizer(test_lines)
+    
+    # DO
+    tokens = tokenizer.tokenize()
+    
+    passed = True
+    
+    for i in range(len(tokens)):
+        if expected_types[i].name != tokens[i].type.name:
+            passed = False
+            
+    assert passed
+    
+def test_tokenizer_assings_correct_type_3():
+    # ASSIGN
+    test_lines = ["HOP > 3", "GLUE", "SHOVE 5", "YEET", "FREEZE"]
+    
+    expected_types = [TokenType.OPCODE, TokenType.CONDITIONAL, TokenType.INT_LITERAL, 
+                      TokenType.OPCODE, TokenType.OPCODE, TokenType.INT_LITERAL, 
+                      TokenType.OPCODE, TokenType.OPCODE]
     
     tokenizer = Tokenizer(test_lines)
     
