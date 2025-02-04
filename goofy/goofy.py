@@ -38,7 +38,7 @@ def main():
     
     with open(file, "r", encoding="UTF-8") as file_to_intrepret:
         while current_line := file_to_intrepret.readline():
-            file_lines.append(current_line)
+            file_lines.extend(current_line.strip().split(" "))
         
     if len(file_lines) == 0:
         LOGGER.warning(f"The file you provided has no content. Did you provid the right file? File at: {file}")
