@@ -2,15 +2,23 @@ from dataclasses import dataclass
 from enum import Enum
 
 class TokenType(Enum):
-     OPCODE = 1
-     STRING_LITERAL = 2
-     INT_LITERAL = 3
-     CONDITIONAL = 4
-     UNKNOWN = 5 
-        
+    """ Enum that represents the different
+    types of tokens that can exist in goofy lang.
+    """
+    OPCODE = 1
+    STRING_LITERAL = 2
+    INT_LITERAL = 3
+    CONDITIONAL = 4
+    UNKNOWN = 5 
+
+# Stores the types of conditional operators supported in goofy lang        
 CONDITIONALS = ["=", ">", "<", ">=", "<=", "!="]
      
-class Tokenizer:
+class GoofyTokenizer:
+    """ Responsible for tokenizing
+    a goofy lang file, determining the
+    types and values associated with them.
+    """
 
     @dataclass
     class Token:
@@ -19,14 +27,25 @@ class Tokenizer:
         """
         value: str
         type: TokenType
-      
-        
+            
     def __init__(self, file_lines: list[str]):
         self.file_lines: list[str] = file_lines
         
         self.tokens: list[self.Token] = []
+        
+    def __str__(self):
+        return "Tokens:\n" + "\n".join(f"{i + 1}: Value = {token.value} Type = {token.type.name}" for i, token in enumerate(self.tokens))
     
     def get_token_type(self, statement: str) -> TokenType:
+        """ Derives a token type from the provided string literal
+        statement.
+
+        Args:
+            statement (str): the statement to derive the token type from
+
+        Returns:
+            TokenType: the token type derived from the provided statement.
+        """
         type = TokenType.UNKNOWN
         
         if str.isupper(statement):
@@ -40,7 +59,13 @@ class Tokenizer:
         
         return type
         
-    def tokenize(self):
+    def tokenize(self) -> list[Token]:
+        """ Derives a list of tokens from the goofy lang file
+        and returns a list of those tokens.
+
+        Returns:
+            list[Token]: the list of derived tokens from the goofy lang file.
+        """
         # For storing the non tokenized statements in the file
         parsed_statements = []
         
@@ -58,6 +83,4 @@ class Tokenizer:
             
             self.tokens.append(current_token)
             
-        return self.tokens
-        
-            
+        return self.tokens       

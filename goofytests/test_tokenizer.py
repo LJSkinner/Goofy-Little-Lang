@@ -1,5 +1,5 @@
 
-from goofy.goofy_tokenizer import Tokenizer, TokenType
+from goofy.goofy_tokenizer import GoofyTokenizer, TokenType
 
 def func(x):
     return x + 1
@@ -8,7 +8,7 @@ def test_tokenizer_returns_correct_length():
     # ASSIGN
     test_lines = ["SHOVE", "3", "FREEZE"]
     
-    tokenizer = Tokenizer(test_lines)
+    tokenizer = GoofyTokenizer(test_lines)
     
     # DO
     tokens = tokenizer.tokenize()
@@ -21,7 +21,7 @@ def test_tokenizer_assigns_correct_value():
     # ASSIGN
     test_lines = ["SHOVE", "3", "FREEZE"]
     
-    tokenizer = Tokenizer(test_lines)
+    tokenizer = GoofyTokenizer(test_lines)
       
     # DO
     tokens = tokenizer.tokenize()
@@ -40,7 +40,7 @@ def test_tokenizer_assings_correct_type_1():
     
     expected_types = [TokenType.OPCODE, TokenType.INT_LITERAL, TokenType.OPCODE]
     
-    tokenizer = Tokenizer(test_lines)
+    tokenizer = GoofyTokenizer(test_lines)
     
     # DO
     tokens = tokenizer.tokenize()
@@ -61,7 +61,7 @@ def test_tokenizer_assings_correct_type_2():
                       TokenType.OPCODE, TokenType.INT_LITERAL, TokenType.OPCODE, 
                       TokenType.OPCODE]
     
-    tokenizer = Tokenizer(test_lines)
+    tokenizer = GoofyTokenizer(test_lines)
     
     # DO
     tokens = tokenizer.tokenize()
@@ -82,7 +82,7 @@ def test_tokenizer_assings_correct_type_3():
                       TokenType.OPCODE, TokenType.OPCODE, TokenType.INT_LITERAL, 
                       TokenType.OPCODE, TokenType.OPCODE]
     
-    tokenizer = Tokenizer(test_lines)
+    tokenizer = GoofyTokenizer(test_lines)
     
     # DO
     tokens = tokenizer.tokenize()
