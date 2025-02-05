@@ -9,6 +9,7 @@ class SupportedOpcodes(Enum):
     are supported in goofy.
     """
     SHOVE = "SHOVE"
+    YEET = "YEET"
 
 class GoofyInterpreter:
     """ Responsible for doing the interpretation
@@ -62,6 +63,19 @@ class GoofyInterpreter:
                             LOGGER.error("There was no token to the right of SHOVE. Please make sure you remember to add a number")
                             
                             return not interpreting_succeded
+                   case SupportedOpcodes.YEET.value:
+                        if len(self.stack) < 2:
+                            LOGGER.error("The stack does not contain at least two values to YEET. Ex: SHOVE 3 SHOVE 4 YEET")
+                            
+                            return not interpreting_succeded
+                        
+                        first = self.stack.pop()
+                        
+                        second = self.stack.pop()
+                        
+                        result = first - second
+                        
+                        self.stack.append(result)
                              
            elif token.type == TokenType.UNKNOWN:
                LOGGER.error("Token %d:%s is an unknown token type. Please review the provided source", i, token.value)
