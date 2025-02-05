@@ -10,6 +10,7 @@ class SupportedOpcodes(Enum):
     """
     SHOVE = "SHOVE"
     YEET = "YEET"
+    GLUE = "GLUE"
 
 class GoofyInterpreter:
     """ Responsible for doing the interpretation
@@ -42,7 +43,7 @@ class GoofyInterpreter:
         for i, token in enumerate(tokens):
            if token.type == TokenType.OPCODE:
                if not SupportedOpcodes.__contains__(token.value):
-                   LOGGER.error("Token %d:%s contains an unsupported opcode", i, token.value)
+                   LOGGER.error("Token %d:%s contains an unsupported opcode", i + 1, token.value)
                    
                    return not interpreting_succeded
                
@@ -53,7 +54,7 @@ class GoofyInterpreter:
                          next_token = tokens[i + 1]
                         
                          if not next_token.type == TokenType.INT_LITERAL:
-                            LOGGER.error("Token %d:%s is not an integer. SHOVE must be supplied an integer. Ex: SHOVE 3", i, token.value)
+                            LOGGER.error("Token %d:%s is not an integer. SHOVE must be supplied an integer. Ex: SHOVE 3", i + 1, next_token.value)
                             
                             return not interpreting_succeded
                         
@@ -76,9 +77,22 @@ class GoofyInterpreter:
                         result = first - second
                         
                         self.stack.append(result)
+                   case SupportedOpcodes.GLUE.value:
+                        if len(self.stack) < 2:
+                            LOGGER.error("The stack does not contain at least two values to GLUE. Ex: SHOVE 3 SHOVE 4 GLUE")
+                            
+                            return not interpreting_succeded
+                        
+                        first = self.stack.pop()
+                        
+                        second = self.stack.pop()
+                        
+                        result = first + second
+                        
+                        self.stack.append(result)
                              
            elif token.type == TokenType.UNKNOWN:
-               LOGGER.error("Token %d:%s is an unknown token type. Please review the provided source", i, token.value)
+               LOGGER.error("Token %d:%s is an unknown token type. Please review the provided source", i + 1, token.value)
                
                return not interpreting_succeded
                
