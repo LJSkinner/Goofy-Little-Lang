@@ -83,10 +83,14 @@ class GoofyTokenizer:
                 if str.isspace(character):
                     parts.append(current_part)
                     
+                    current_part = ""
+                    
                     continue
-                
+            
             current_part += character
-             
+            
+        parts.append(current_part)  
+        
         return parts
             
     def tokenize(self) -> list[Token]:
