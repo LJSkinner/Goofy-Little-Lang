@@ -58,7 +58,37 @@ class GoofyTokenizer:
             type = TokenType.CONDITIONAL
         
         return type
+    
+    def parse_statement_with_quotes(self, statement: str) -> list[str]:
+        """ For parsing a statement which contains quotes
+        to account for spaces.
+
+        Args:
+            statement (str): the statement to parse
+
+        Returns:
+            list[str]: the list of statement parts that have been parsed accounting for quotes
+        """
+        parts = []
         
+        quote = False
+    
+        current_part = ""
+        
+        for character in statement:
+            if character == "\"":
+                quote = not quote
+            
+            if not quote:
+                if str.isspace(character):
+                    parts.append(current_part)
+                    
+                    continue
+                
+            current_part += character
+             
+        return parts
+            
     def tokenize(self) -> list[Token]:
         """ Derives a list of tokens from the goofy lang file
         and returns a list of those tokens.
@@ -66,11 +96,14 @@ class GoofyTokenizer:
         Returns:
             list[Token]: the list of derived tokens from the goofy lang file.
         """
-        # For storing the non tokenized statements in the file
         parsed_statements = []
         
         for line in self.file_lines:
-            statement_parts = line.split()
+            # NOTE: If more tokens require this kind of granular parsing, should switch the entire tokenizer to looking at characters.
+            if line.__contains__("\""):
+                statement_parts = self.parse_statement_with_quotes(line)
+            else:
+                statement_parts = line.split() 
             
             parsed_statements.extend(statement_parts)
         
