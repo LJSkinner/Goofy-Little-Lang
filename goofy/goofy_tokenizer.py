@@ -50,7 +50,7 @@ class GoofyTokenizer:
         
         if str.isupper(statement):
             type = TokenType.OPCODE
-        elif str.isnumeric(statement):
+        elif str.isnumeric(statement.lstrip('-')):
             type = TokenType.INT_LITERAL
         elif str.__contains__(statement, "\""):
             type = TokenType.STRING_LITERAL
