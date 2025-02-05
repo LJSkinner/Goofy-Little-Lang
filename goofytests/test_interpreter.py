@@ -90,6 +90,21 @@ def test_interpreter_stack_operation_shove():
     assert stack[0] == 3
     
     assert success
+
+def test_interpreter_stack_operation_shove_negative():
+    test_lines = ["SHOVE -3"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == -3
+    
+    assert success
     
 def test_interpreter_stack_operation_shove_no_integer():
     test_lines = ["SHOVE"]
@@ -215,5 +230,95 @@ def test_interpreter_stack_operation_yeet_is_correct_4():
     assert len(stack) == 1
     
     assert stack[0] == 2
+
+    assert success
+    
+def test_interpreter_stack_operation_glue_stack_popped():
+    test_lines = ["SHOVE 3 SHOVE 4 GLUE"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert success
+    
+def test_interpreter_stack_operation_glue_is_correct_1():
+    test_lines = ["SHOVE 3 SHOVE 4 GLUE SHOVE 3 SHOVE 6 GLUE"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 2
+    
+    assert stack[0] == 7
+    
+    assert stack[1] == 9
+    
+    assert success
+
+def test_interpreter_stack_operation_glue_is_correct_2():
+    test_lines = ["SHOVE -4 SHOVE 2 GLUE"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == -2
+    
+    assert success
+
+def test_interpreter_stack_operation_glue_is_correct_3():
+    test_lines = ["SHOVE 30 SHOVE 40 GLUE"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == 70
+    
+    assert success
+
+def test_interpreter_stack_operation_glue_is_correct_4():
+    test_lines = ["SHOVE 3 SHOVE 4 GLUE SHOVE 3 SHOVE 6 GLUE GLUE"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == 16
+
+    assert success
+
+def test_interpreter_stack_operation_yeet_and_glue_together():
+    test_lines = ["SHOVE 3 SHOVE 4 YEET SHOVE 3 SHOVE 6 YEET GLUE"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == 4
 
     assert success
