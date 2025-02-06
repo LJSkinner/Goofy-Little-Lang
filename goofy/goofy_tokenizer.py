@@ -10,6 +10,14 @@ class TokenType(Enum):
     INT_LITERAL = 3
     CONDITIONAL = 4
     UNKNOWN = 5 
+    
+@dataclass
+class Token:
+        """ Represents an individual token that has 
+        been parsed by the tokenizer. 
+        """
+        value: str
+        type: TokenType
 
 # Stores the types of conditional operators supported in goofy lang        
 CONDITIONALS = ["=", ">", "<", ">=", "<=", "!="]
@@ -20,18 +28,10 @@ class GoofyTokenizer:
     types and values associated with them.
     """
 
-    @dataclass
-    class Token:
-        """ Represents an individual token that has 
-        been parsed by the tokenizer. 
-        """
-        value: str
-        type: TokenType
-            
     def __init__(self, file_lines: list[str]):
         self.file_lines: list[str] = file_lines
         
-        self.tokens: list[self.Token] = []
+        self.tokens: list[Token] = []
         
     def __str__(self):
         return "Tokens:\n" + "\n".join(f"{i + 1}: Value = {token.value} Type = {token.type.name}" for i, token in enumerate(self.tokens))
