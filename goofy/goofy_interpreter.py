@@ -8,11 +8,18 @@ class SupportedOpcodes(Enum):
     """ Represents the opcodes which
     are supported in goofy.
     """
+    # Goofy's equivalent of PUSH, pushes a int onto the stack.
     SHOVE = "SHOVE"
+    
+    # Goofy's equivalent of SUB, pops two values off the stack and subtracts them, then pushes the result.
     YEET = "YEET"
+    
+    # Goofy's equivalent of ADD, pops two values off the stack and adds them, then pushes the result.
     GLUE = "GLUE"
+    
+    # Goofy's equivalent of PRINT, prints a string to stdout. 
     YELL = "YELL"
-
+    
 class GoofyInterpreter:
     """ Responsible for doing the interpretation
     of a goofy lang file, determining which operations
