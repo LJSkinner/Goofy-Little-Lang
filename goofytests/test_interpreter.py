@@ -374,3 +374,17 @@ def test_interpreter_operation_yell_no_token():
     assert len(stack) == 0
 
     assert not success
+    
+def test_interpreter_operation_snoop():
+    test_lines = ["SNOOP"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+
+    assert success
+    
