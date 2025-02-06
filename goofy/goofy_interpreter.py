@@ -23,6 +23,9 @@ class SupportedOpcodes(Enum):
     # Goofy's equivalent of READ, reads a number from stdin and pushes onto the stack
     SNOOP = "SNOOP"
     
+    # Goofy's equivalent of MUL, pops two values off the stack and multiplies them, then pushes the result.
+    MOOSH = "MOOSH"
+    
 class GoofyInterpreter:
     """ Responsible for doing the interpretation
     of a goofy lang file, determining which operations
@@ -123,6 +126,20 @@ class GoofyInterpreter:
                         second = self.stack.pop()
                         
                         result = first + second
+                        
+                        self.stack.append(result)
+                  
+                   case SupportedOpcodes.MOOSH.value:
+                        if len(self.stack) < 2:
+                            LOGGER.error("The stack does not contain at least two values to GLUE. Ex: SHOVE 3 SHOVE 4 GLUE")
+                            
+                            return not interpreting_succeded
+                        
+                        first = self.stack.pop()
+                        
+                        second = self.stack.pop()
+                        
+                        result = first * second
                         
                         self.stack.append(result)
                              
