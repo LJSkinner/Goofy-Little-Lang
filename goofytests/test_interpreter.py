@@ -307,7 +307,69 @@ def test_interpreter_stack_operation_glue_is_correct_4():
     assert stack[0] == 16
 
     assert success
+    
+def test_interpreter_stack_operation_moosh_is_correct_1():
+    test_lines = ["SHOVE 3 SHOVE 4 MOOSH SHOVE 3 SHOVE 6 MOOSH"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 2
+    
+    assert stack[0] == 12
+    
+    assert stack[1] == 18
+    
+    assert success
 
+def test_interpreter_stack_operation_moosh_is_correct_2():
+    test_lines = ["SHOVE -4 SHOVE 2 MOOSH"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == -8
+    
+    assert success
+
+def test_interpreter_stack_operation_moosh_is_correct_3():
+    test_lines = ["SHOVE 30 SHOVE 40 MOOSH"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == 1200
+    
+    assert success
+
+def test_interpreter_stack_operation_moosh_is_correct_4():
+    test_lines = ["SHOVE 3 SHOVE 4 MOOSH SHOVE 3 SHOVE 6 MOOSH MOOSH"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == 216
+
+    assert success
+    
 def test_interpreter_stack_operation_yeet_and_glue_together():
     test_lines = ["SHOVE 3 SHOVE 4 YEET SHOVE 3 SHOVE 6 YEET GLUE"]
     
@@ -323,6 +385,21 @@ def test_interpreter_stack_operation_yeet_and_glue_together():
 
     assert success
     
+def test_interpreter_stack_operation_yeet_and_glue_and_mul_together():
+    test_lines = ["SHOVE 3 SHOVE 4 YEET SHOVE 3 SHOVE 6 YEET GLUE SHOVE 4 MOOSH"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == 16
+
+    assert success
+
 def test_interpreter_operation_yell_string():
     test_lines = ["YELL \"afwfwfw\""]
     
