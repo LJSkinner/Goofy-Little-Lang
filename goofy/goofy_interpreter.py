@@ -20,6 +20,9 @@ class SupportedOpcodes(Enum):
     # Goofy's equivalent of PRINT, prints a string to stdout. 
     YELL = "YELL"
     
+    # Goofy's equivalent of READ, reads a number from stdin and pushes onto the stack
+    SNOOP = "SNOOP"
+    
 class GoofyInterpreter:
     """ Responsible for doing the interpretation
     of a goofy lang file, determining which operations
@@ -84,6 +87,16 @@ class GoofyInterpreter:
                            LOGGER.error("There was no token to the right of YELL. Please make sure you remember to add a value")
                            
                            return not interpreting_succeded
+                   
+                   case SupportedOpcodes.SNOOP.value:
+                       user_input = input()
+                       
+                       if not str.isnumeric(user_input):
+                           LOGGER.error("The input entered was not a number, please supply a number")
+                           
+                           return not interpreting_succeded
+                       
+                       self.stack.append(int(user_input))
                        
                    case SupportedOpcodes.YEET.value:
                         if len(self.stack) < 2:
