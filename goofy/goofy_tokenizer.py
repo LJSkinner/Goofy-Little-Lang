@@ -116,7 +116,7 @@ class GoofyTokenizer:
             
             token_type = self.get_token_type(statement)
            
-            current_token = self.Token(token_value, token_type)
+            current_token = Token(token_value, token_type)
             
             self.tokens.append(current_token)
             
