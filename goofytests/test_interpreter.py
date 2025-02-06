@@ -322,3 +322,55 @@ def test_interpreter_stack_operation_yeet_and_glue_together():
     assert stack[0] == 4
 
     assert success
+    
+def test_interpreter_operation_yell_string():
+    test_lines = ["YELL \"afwfwfw\""]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 0
+
+    assert success
+
+def test_interpreter_operation_yell_number():
+    test_lines = ["YELL 3"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 0
+
+    assert success
+    
+def test_interpreter_operation_yell_unknown():
+    test_lines = ["YELL ^aaaf"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 0
+
+    assert not success
+    
+def test_interpreter_operation_yell_no_token():
+    test_lines = ["YELL"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 0
+
+    assert not success
