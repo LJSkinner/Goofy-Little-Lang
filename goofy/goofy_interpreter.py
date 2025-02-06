@@ -131,7 +131,7 @@ class GoofyInterpreter:
                   
                    case SupportedOpcodes.MOOSH.value:
                         if len(self.stack) < 2:
-                            LOGGER.error("The stack does not contain at least two values to GLUE. Ex: SHOVE 3 SHOVE 4 GLUE")
+                            LOGGER.error("The stack does not contain at least two values to MOOSH. Ex: SHOVE 3 SHOVE 4 MOOSH")
                             
                             return not interpreting_succeded
                         
