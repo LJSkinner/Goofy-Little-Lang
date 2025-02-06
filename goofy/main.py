@@ -1,6 +1,8 @@
 import sys
 import logging
 
+from goofy.goofy_interpreter import GoofyInterpreter
+
 FILE_EXTENSION_NAME = ".goofy"
 
 LOGGER = logging.getLogger(__name__)
@@ -22,7 +24,7 @@ def main():
     configure_logging()
     
     if len(sys.argv) < 2:
-        LOGGER.info("Goofy lang file was not provided\nUsage: python3 goofy.py <goofy_file>",)
+        LOGGER.info("Goofy lang file was not provided\nUsage: python3 goofy.py <goofy_file>")
         
         return
     
@@ -41,9 +43,13 @@ def main():
             file_lines.append(current_line.strip())
         
     if len(file_lines) == 0:
-        LOGGER.warning(f"The file you provided has no content. Did you provid the right file? File at: {file}")
+        LOGGER.warning(f"The file you provided has no content. Did you provide the right file? File at: {file}")
         
         return
+    
+    interpreter = GoofyInterpreter(file_lines)
+    
+    success = interpreter.interpret()
     
 if __name__ == '__main__':
     main()
