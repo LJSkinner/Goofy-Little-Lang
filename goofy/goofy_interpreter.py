@@ -26,6 +26,9 @@ class SupportedOpcodes(Enum):
     # Goofy's equivalent of MUL, pops two values off the stack and multiplies them, then pushes the result.
     MOOSH = "MOOSH"
     
+    # Goofy's equivalent of DIV, pops two values off the stack and divides them, then pushes the result.
+    SNIP = "SNIP"
+    
 class GoofyInterpreter:
     """ Responsible for doing the interpretation
     of a goofy lang file, determining which operations
@@ -140,6 +143,25 @@ class GoofyInterpreter:
                         second = self.stack.pop()
                         
                         result = first * second
+                        
+                        self.stack.append(result)
+                        
+                   case SupportedOpcodes.SNIP.value:
+                        if len(self.stack) < 2:
+                            LOGGER.error("The stack does not contain at least two values to SNIP. Ex: SHOVE 3 SHOVE 4 SNIP")
+                            
+                            return not interpreting_succeded
+                        
+                        first = self.stack.pop()
+                        
+                        second = self.stack.pop()
+                        
+                        if second == 0:
+                            LOGGER.error("Attempt to divide by zero, please review your program flow.")
+                            
+                            return not interpreting_succeded
+                        
+                        result = int(first / second)
                         
                         self.stack.append(result)
                              
