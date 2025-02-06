@@ -11,6 +11,7 @@ class SupportedOpcodes(Enum):
     SHOVE = "SHOVE"
     YEET = "YEET"
     GLUE = "GLUE"
+    YELL = "YELL"
 
 class GoofyInterpreter:
     """ Responsible for doing the interpretation
@@ -49,6 +50,7 @@ class GoofyInterpreter:
                
                # Where actual interpretation work begins: 
                match token.value:
+                   
                    case SupportedOpcodes.SHOVE.value:
                         if len(tokens) > i + 1:
                          next_token = tokens[i + 1]
@@ -64,6 +66,18 @@ class GoofyInterpreter:
                             LOGGER.error("There was no token to the right of SHOVE. Please make sure you remember to add a number")
                             
                             return not interpreting_succeded
+                        
+                   case SupportedOpcodes.YELL.value:
+                       if len(tokens) > i + 1:
+                           next_token = tokens[i + 1]
+                           
+                           print(next_token.value.strip("\""))
+                    
+                       else:
+                           LOGGER.error("There was no token to the right of YELL. Please make sure you remember to add a value")
+                           
+                           return not interpreting_succeded
+                       
                    case SupportedOpcodes.YEET.value:
                         if len(self.stack) < 2:
                             LOGGER.error("The stack does not contain at least two values to YEET. Ex: SHOVE 3 SHOVE 4 YEET")
@@ -77,6 +91,7 @@ class GoofyInterpreter:
                         result = first - second
                         
                         self.stack.append(result)
+                        
                    case SupportedOpcodes.GLUE.value:
                         if len(self.stack) < 2:
                             LOGGER.error("The stack does not contain at least two values to GLUE. Ex: SHOVE 3 SHOVE 4 GLUE")
