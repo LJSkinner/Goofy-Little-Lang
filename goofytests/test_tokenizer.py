@@ -80,6 +80,24 @@ def test_tokenizer_assigns_correct_type_3():
             
     assert passed
     
+def test_tokenizer_assigns_correct_type_4():
+    test_lines = ["BOUNCE > 0 #L1", "L1:"]
+    
+    expected_types = [TokenType.OPCODE, TokenType.CONDITIONAL, TokenType.INT_LITERAL, 
+                      TokenType.LABEL_DEFINITION, TokenType.LABEL_START]
+    
+    tokenizer = GoofyTokenizer(test_lines)
+    
+    tokens = tokenizer.tokenize()
+    
+    passed = True
+    
+    for i in range(len(tokens)):
+        if expected_types[i].name != tokens[i].type.name:
+            passed = False
+            
+    assert passed
+    
 def test_tokenizer_assigns_correct_type_when_string_has_space():
 
     test_lines = ["SNOOP \"two words\""]
