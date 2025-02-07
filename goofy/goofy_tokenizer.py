@@ -9,7 +9,9 @@ class TokenType(Enum):
     STRING_LITERAL = 2
     INT_LITERAL = 3
     CONDITIONAL = 4
-    UNKNOWN = 5 
+    LABEL_DEFINITION = 5
+    LABEL_START = 6
+    UNKNOWN = 7
     
 @dataclass
 class Token:
@@ -48,17 +50,38 @@ class GoofyTokenizer:
         """
         type = TokenType.UNKNOWN
         
-        if str.isupper(statement):
+        if str.__contains__(statement, "#") and not str.__contains__(statement, "\""):
+            type = TokenType.LABEL_DEFINITION
+            
+        elif str.__contains__(statement, ":") and not str.__contains__(statement, "\""):
+            type = TokenType.LABEL_START
+            
+        elif str.isupper(statement):
             type = TokenType.OPCODE
+            
         elif str.isnumeric(statement.lstrip('-')):
             type = TokenType.INT_LITERAL
+            
         elif str.__contains__(statement, "\""):
             type = TokenType.STRING_LITERAL
+            
         elif statement in CONDITIONALS:
             type = TokenType.CONDITIONAL
         
         return type
     
+    def get_tokens_by_type(self, type: TokenType) -> list[Token]:
+        """ Gets a list of tokens by their type from
+        the tokenized list
+
+        Args:
+            token_list (Token): the list of tokens to search on.
+
+        Returns:
+            list[Token]: the list of tokens that matched the search.
+        """
+        return [token for token in self.tokens if token.type == type]
+        
     def parse_statement_with_quotes(self, statement: str) -> list[str]:
         """ For parsing a statement which contains quotes
         to account for spaces.
@@ -120,4 +143,6 @@ class GoofyTokenizer:
             
             self.tokens.append(current_token)
             
-        return self.tokens       
+        return self.tokens
+    
+    
