@@ -1,7 +1,6 @@
 from enum import Enum
 from goofy.goofy_tokenizer import GoofyTokenizer, TokenType
 import logging
-import sys
 
 LOGGER = logging.getLogger(__name__)
 
@@ -33,6 +32,9 @@ class SupportedOpcodes(Enum):
     # Goofy's equivalent of HALT, stops the execution at this point.
     FREEZE = "FREEZE"
     
+    # Goofy's equivalent of JUMP, will jump based on a condition.
+    BOUNCE = "BOUNCE"
+    
 class GoofyInterpreter:
     """ Responsible for doing the interpretation
     of a goofy lang file, determining which operations
@@ -61,7 +63,11 @@ class GoofyInterpreter:
             
             return not interpreting_succeded
         
-        for i, token in enumerate(tokens):
+        i = 0
+        
+        while i < len(tokens):
+           token = tokens[i]
+          
            if token.type == TokenType.OPCODE:
                if not SupportedOpcodes.__contains__(token.value):
                    LOGGER.error("Token %d:%s contains an unsupported opcode", i + 1, token.value)
@@ -86,7 +92,69 @@ class GoofyInterpreter:
                             LOGGER.error("There was no token to the right of SHOVE. Please make sure you remember to add a number")
                             
                             return not interpreting_succeded
+                   
+                   case SupportedOpcodes.BOUNCE.value:
+                       if len(tokens) > i + 3:
+                           conditional_token = tokens[i + 1]
+                           
+                           comparison_token = tokens[i + 2]
+                           
+                           label_definition_token = tokens[i + 3]
                         
+                           if not conditional_token.type == TokenType.CONDITIONAL:
+                            LOGGER.error("There as no conditional token provided to the right of BOUNCE. Ex: BOUNCE > 0 #L1")
+                            
+                            return not interpreting_succeded
+                        
+                           if not comparison_token.type == TokenType.INT_LITERAL:
+                            LOGGER.error("The comparison token provided for BOUNCE was not an integer. Ex: BOUNCE > 0 #L1")
+                            
+                            return not interpreting_succeded
+                        
+                           if not label_definition_token.type == TokenType.LABEL_DEFINITION:
+                            LOGGER.error("The label definition token provided for BOUNCE was not correct. Must contain a '#' before label name. Ex: BOUNCE > 0 #L1")
+                            
+                            return not interpreting_succeded
+                        
+                           if self.is_stack_empty():
+                            LOGGER.error("There is no value on the stack for bounce to compare to. Make sure you add a value to the stack. Ex: SHOVE 10 | SNOOP")
+                            
+                            return not interpreting_succeded
+                        
+                           top = self.get_stack_top()
+                           
+                           expression_result = eval(f"{top} {conditional_token.value} {comparison_token.value}")
+                           
+                           if not expression_result:
+                               # skip the bounce statement if it's false
+                               i += 4 
+                               
+                               continue
+                            
+                           label_start_tokens = self.tokenizer.get_tokens_by_type(TokenType.LABEL_START)
+                           
+                           found_label_start = False
+                           
+                           for label_start_token in label_start_tokens:
+                               if label_definition_token.value.strip("#") == label_start_token.value.strip(":"):
+                                   i = tokens.index(label_start_token)
+                                   
+                                   found_label_start = True
+                                   
+                                   break
+                                   
+                           if found_label_start:
+                               continue
+                           else:         
+                               LOGGER.error("There was no label start found for label definition token: %s. Did you forget it?", label_definition_token.value) 
+                               
+                               return not interpreting_succeded   
+                       else:
+                            LOGGER.error("There was a missing token to the right of BOUNCE. Please review your code")
+                            
+                            return not interpreting_succeded   
+                           
+                    
                    case SupportedOpcodes.FREEZE.value:
                        return interpreting_succeded
                         
@@ -171,11 +239,13 @@ class GoofyInterpreter:
                         result = int(first / second)
                         
                         self.stack.append(result)
-                             
+        
            elif token.type == TokenType.UNKNOWN:
                LOGGER.error("Token %d:%s is an unknown token type. Please review the provided source", i + 1, token.value)
                
                return not interpreting_succeded
+           
+           i += 1
                
         return interpreting_succeded    
                                      
@@ -188,4 +258,20 @@ class GoofyInterpreter:
             list[int]: the current stack which contains 
             the values added during interpretation.
         """
-        return self._stack     
+        return self._stack    
+    
+    def get_stack_top(self) -> int:
+        """ Gets the element at the top of the stack
+
+        Returns:
+            int: the element currently at the top of the stack
+        """
+        return self.stack[len(self.stack) - 1] 
+    
+    def is_stack_empty(self) -> bool:
+        """ Deterimens whether the stack is empty or not.
+
+        Returns:
+            bool: true if the stack is empty, false otherwise
+        """
+        return len(self.stack) == 0
