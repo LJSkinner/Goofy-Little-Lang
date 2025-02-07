@@ -118,7 +118,52 @@ def test_interpreter_operation_freeze_with_no_value_on_stack():
     assert len(stack) == 0
     
     assert success
-
+    
+def test_interpreter_operation_bounce_1():
+    test_lines = ["YELL \"aaaa\" SHOVE 10 BOUNCE > 0 #L1 L1: SHOVE 10 FREEZE"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 2
+    
+    assert interpreter.get_stack_top() == 10
+    
+    assert success
+    
+def test_interpreter_operation_bounce_2():
+    test_lines = ["YELL \"aaaa\" SHOVE 5 BOUNCE > 0 #L1 L1:"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert interpreter.get_stack_top() == 5
+    
+    assert success
+    
+def test_interpreter_operation_bounce_unknown_token():
+    test_lines = ["YELL \"aaaa\" SHOVE 5 BOUNCE > 0 #L1 L1: ^£aa"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert interpreter.get_stack_top() == 5
+    
+    assert not success
+       
 def test_interpreter_stack_operation_shove_negative():
     test_lines = ["SHOVE -3"]
     
