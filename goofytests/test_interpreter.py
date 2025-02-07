@@ -91,6 +91,34 @@ def test_interpreter_stack_operation_shove():
     
     assert success
 
+def test_interpreter_operation_freeze_with_value_on_stack():
+    test_lines = ["SHOVE 3 FREEZE SHOVE 10"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 1
+    
+    assert stack[0] == 3
+    
+    assert success
+    
+def test_interpreter_operation_freeze_with_no_value_on_stack():
+    test_lines = ["FREEZE SNOOP SHOVE 10"]
+    
+    interpreter = GoofyInterpreter(test_lines)
+    
+    success = interpreter.interpret()
+    
+    stack = interpreter.stack
+    
+    assert len(stack) == 0
+    
+    assert success
+
 def test_interpreter_stack_operation_shove_negative():
     test_lines = ["SHOVE -3"]
     
