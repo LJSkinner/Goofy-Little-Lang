@@ -1,6 +1,7 @@
 from enum import Enum
 from goofy.goofy_tokenizer import GoofyTokenizer, TokenType
 import logging
+import sys
 
 LOGGER = logging.getLogger(__name__)
 
@@ -28,6 +29,9 @@ class SupportedOpcodes(Enum):
     
     # Goofy's equivalent of DIV, pops two values off the stack and divides them, then pushes the result.
     SNIP = "SNIP"
+    
+    # Goofy's equivalent of HALT, stops the execution at this point.
+    FREEZE = "FREEZE"
     
 class GoofyInterpreter:
     """ Responsible for doing the interpretation
@@ -82,6 +86,9 @@ class GoofyInterpreter:
                             LOGGER.error("There was no token to the right of SHOVE. Please make sure you remember to add a number")
                             
                             return not interpreting_succeded
+                        
+                   case SupportedOpcodes.FREEZE.value:
+                       return interpreting_succeded
                         
                    case SupportedOpcodes.YELL.value:
                        if len(tokens) > i + 1:
