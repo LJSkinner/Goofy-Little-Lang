@@ -51,5 +51,7 @@ def main():
     
     success = interpreter.interpret()
     
+    LOGGER.info(interpreter.stack)
+    
 if __name__ == '__main__':
     main()
