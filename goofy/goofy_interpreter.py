@@ -241,7 +241,9 @@ class GoofyInterpreter:
     def interpret_yeet(self, tokens: Token):
         """ Responsible for interpreting the YEET opcode.
         This pops two values off the stack, subtracts them and
-        then pushes the result onto the stack.
+        then pushes the result onto the stack. Alternatively,
+        an integer can be supplied after the command to subtract
+        that value from the stack. Ex: YEET 1
 
         Args:
             tokens (Token): the current list of tokens to parse.
@@ -252,17 +254,31 @@ class GoofyInterpreter:
         """
         success = True
         
+        if len(tokens) > self.index + 1:
+            next_token = tokens[self.index + 1]
+            
+            if next_token.type == TokenType.INT_LITERAL:
+                first = self.stack.pop()
+                
+                second = int(next_token.value)
+                
+                result = first - second
+                
+                self.stack.append(result)
+                
+                return success
+
         if len(self.stack) < 2:
             LOGGER.error("The stack does not contain at least two values to YEET. Ex: SHOVE 3 SHOVE 4 YEET")
-                            
+                                
             return not success
-                        
+                            
         first = self.stack.pop()
-                        
+                            
         second = self.stack.pop()
-                        
+                            
         result = first - second
-                        
+                            
         self.stack.append(result)
         
         return success
@@ -270,7 +286,9 @@ class GoofyInterpreter:
     def interpret_glue(self, tokens: Token):
         """ Responsible for interpreting the GLUE opcode.
         This pops two values off the stack, adds them and
-        then pushes the result onto the stack.
+        then pushes the result onto the stack. Alternatively,
+        an integer can be supplied after the command to subtract
+        that value from the stack. Ex: GLUE 1
 
         Args:
             tokens (Token): the current list of tokens to parse.
@@ -281,6 +299,20 @@ class GoofyInterpreter:
         """
         success = True
         
+        if len(tokens) > self.index + 1:
+            next_token = tokens[self.index + 1]
+            
+            if next_token.type == TokenType.INT_LITERAL:
+                first = self.stack.pop()
+                
+                second = int(next_token.value)
+                
+                result = first + second
+                
+                self.stack.append(result)
+                
+                return success
+
         if len(self.stack) < 2:
             LOGGER.error("The stack does not contain at least two values to GLUE. Ex: SHOVE 3 SHOVE 4 GLUE")
                             
@@ -299,7 +331,9 @@ class GoofyInterpreter:
     def interpret_moosh(self, tokens: Token):
         """ Responsible for interpreting the MOOSH opcode.
         This pops two values off the stack, multiplies them and
-        then pushes the result onto the stack.
+        then pushes the result onto the stack. Alternatively,
+        an integer can be supplied after the command to subtract
+        that value from the stack. Ex: MOOSH 2
 
         Args:
             tokens (Token): the current list of tokens to parse.
@@ -310,6 +344,20 @@ class GoofyInterpreter:
         """
         success = True
         
+        if len(tokens) > self.index + 1:
+            next_token = tokens[self.index + 1]
+            
+            if next_token.type == TokenType.INT_LITERAL:
+                first = self.stack.pop()
+                
+                second = int(next_token.value)
+                
+                result = first * second
+                
+                self.stack.append(result)
+                
+                return success
+
         if len(self.stack) < 2:
             LOGGER.error("The stack does not contain at least two values to MOOSH. Ex: SHOVE 3 SHOVE 4 MOOSH")
                             
@@ -328,7 +376,9 @@ class GoofyInterpreter:
     def interpret_snip(self, tokens: Token):
         """ Responsible for interpreting the SNIP opcode.
         This pops two values off the stack, multiplies them and
-        then pushes the result onto the stack.
+        then pushes the result onto the stack. Alternatively,
+        an integer can be supplied after the command to subtract
+        that value from the stack. Ex: SNIP 10
 
         Args:
             tokens (Token): the current list of tokens to parse.
@@ -339,6 +389,25 @@ class GoofyInterpreter:
         """
         success = True
         
+        if len(tokens) > self.index + 1:
+            next_token = tokens[self.index + 1]
+            
+            if next_token.type == TokenType.INT_LITERAL:
+                first = self.stack.pop()
+                
+                second = int(next_token.value)
+                
+                if second == 0:
+                 LOGGER.error("Attempt to divide by zero, please review your program flow.")
+                            
+                 return not success
+                
+                result = first / second
+                
+                self.stack.append(result)
+                
+                return success
+
         if len(self.stack) < 2:
             LOGGER.error("The stack does not contain at least two values to SNIP. Ex: SHOVE 3 SHOVE 4 SNIP")
                             
