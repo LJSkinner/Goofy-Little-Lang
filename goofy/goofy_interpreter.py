@@ -229,7 +229,7 @@ class GoofyInterpreter:
         
         user_input = input()
                        
-        if not str.isnumeric(user_input):
+        if not str.isnumeric(user_input.strip("-")):
             LOGGER.error("The input entered was not a number, please supply a number")
                            
             return not success
@@ -475,7 +475,7 @@ class GoofyInterpreter:
 
           if not expression_result:
              # Skip the bounce statement if it's false
-             self.index += 4
+             self.index += 3
              
              return success
 
