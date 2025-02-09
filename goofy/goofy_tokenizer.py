@@ -22,7 +22,7 @@ class Token:
         type: TokenType
 
 # Stores the types of conditional operators supported in goofy lang        
-CONDITIONALS = ["=", ">", "<", ">=", "<=", "!="]
+CONDITIONALS = ["==", ">", "<", ">=", "<=", "!="]
      
 class GoofyTokenizer:
     """ Responsible for tokenizing
